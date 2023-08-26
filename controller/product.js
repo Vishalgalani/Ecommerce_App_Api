@@ -19,7 +19,7 @@ exports.addProduct = async function (req, res, next) {
         // console.log(req.files);
         var file = req.files.images
         file.map((el) => {
-            console.log(el.filename);
+            // console.log(el.filename);
             req.body.images.push(el.filename)
         })
         if (!req.body.title || !req.body.description || !req.body.price || !req.body.discountPercentage || !req.body.rating || !req.body.stock || !req.body.brand || !req.body.category || !req.body.thumbnail || !req.body.images || !req.body.images.length) {
@@ -146,7 +146,7 @@ exports.searchbyCategory = async function (req, res, next) {
     try {
 
         const data = await PRODUCT.find({ category: { $eq: req.params.id } })
-        console.log(data);
+        // console.log(data);
         res.status(200).json({
             status: "sucessfully",
             message: "Data is found",

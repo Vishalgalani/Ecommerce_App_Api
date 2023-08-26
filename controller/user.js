@@ -26,7 +26,7 @@ async function main(user) {
       html: "<h1><b>Welcome to shopydry</b></h1>", // html body
     });
   
-    console.log("Message sent: %s", info.messageId);
+    // console.log("Message sent: %s", info.messageId);
     // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
   
     //
@@ -46,7 +46,7 @@ exports.CHECKJWT = async function (req, res, next) {
       throw new Error("token not found")
     }
     const decode = jwt.verify(token, process.env.JwtSign);
-    console.log(decode.id);
+    // console.log(decode.id);
     const checkUser = await USER.findById()
     if(!checkUser){
       throw new Error("user not found")

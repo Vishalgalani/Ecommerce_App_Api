@@ -5,7 +5,7 @@ const CATEGORY = require('../model/category')
 exports.addCategory = async function(req, res, next) {
     try {
         // console.log(req.body);
-        console.log("file",req.file);
+        // console.log("file",req.file);
         req.body.image = req.file.filename
         if(!req.body.name || !req.body.image){
             throw new Error("please enter valid field")
