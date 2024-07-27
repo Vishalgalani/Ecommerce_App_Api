@@ -26,14 +26,7 @@ async function main(user) {
       html: "<h1><b>Welcome to shopydry</b></h1>", // html body
     });
   
-    // console.log("Message sent: %s", info.messageId);
-    // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
-  
-    //
-    // NOTE: You can go to https://forwardemail.net/my-account/emails to see your email delivery status and preview
-    //       Or you can use the "preview-email" npm package to preview emails locally in browsers and iOS Simulator
-    //       <https://github.com/forwardemail/preview-email>
-    //
+
   }
   
   
@@ -47,20 +40,17 @@ exports.CHECKJWT = async function (req, res, next) {
     }
     const decode = jwt.verify(token, process.env.JwtSign);
     // console.log(decode.id);
-    const checkUser = await USER.findById()
+    const checkUser = await USER.findById(decode.id)
     if(!checkUser){
       throw new Error("user not found")
     }
-
     req.userId = decode.id;
     next()
-  
   } catch (error) {
     res.status(404).json({
       status: "fail",
       message: error.message
     })
-
   }
 };
 
@@ -122,6 +112,7 @@ exports.LOGIN = async function (req, res, next) {
 //==============================All user===========================
 exports.ALLUSER = async function (req, res, next) {
   try {
+    // console.log(req.body);
     const data = await USER.find()
     res.status(201).json({
       status: "Success",
@@ -158,6 +149,9 @@ exports.DELETETUSER = async function (req, res, next) {
 //==============================Update user===========================
 exports.EDITUSER = async function (req, res, next) {
   try {
+    if(req.body.password){
+      req.body.password = await bcrypt.hash(req.body.password, 10)
+    }
     await USER.findByIdAndUpdate(req.query.id, req.body)
     res.status(200).json({
       status: "Suceess",
@@ -170,3 +164,24 @@ exports.EDITUSER = async function (req, res, next) {
     })
   }
 };
+
+
+exports.checkjwt = async function (req, res, next ) {
+  try {
+    const token = req.headers.authorization
+    if(!token) {
+      throw new Error ("token not found")
+    }
+    const decode = jwt.verify(token, process.env.Jwt)
+    const checkUser = await USER.findById(decode.id)
+    if(!checkUser){
+      throw new Error("user is not found")
+    }
+    next()
+  } catch (error) {
+    res.status(404).json({
+      status : "fail",
+      message : error.message
+    })
+  }
+}

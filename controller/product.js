@@ -76,17 +76,17 @@ exports.updateProduct = async function (req, res, next) {
             var thumbnail = req.files.thumbnail
             // console.log(thumbnail);
             thumbnail.map((el) => {
-                console.log(el.filename);
+                // console.log(el.filename);
                 data.thumbnail = el.filename
             })
         }
         // console.log(req.files.thumbnail.filename);
         if (req.files.images) {
             data.images = []
-            // console.log(req.files);
+            // console.log(req.files);  
             var file = req.files.images
             file.map((el) => {
-                console.log(el.filename);
+                // console.log(el.filename);
                 data.images.push(el.filename)
             })
         }
@@ -164,7 +164,7 @@ exports.searchbyCategory = async function (req, res, next) {
 exports.searchProduct = async function (req, res, next) {
     try {
         const data = await PRODUCT.find({ title: { "$regex": req.query.q, '$options': 'i' } })
-        console.log(data)
+        // console.log(data)
 
         res.status(200).json({
             status: "sucessfully",
@@ -201,3 +201,38 @@ exports.allPage = async function (req, res, next) {
         })
     }
 };
+
+
+//=================================Aggregate ======================
+exports.Group = async function (req, res, next) {
+    try {
+    //   console.log(req.body);
+      const data = await PRODUCT.aggregate([
+        //   {
+        //     $match : 
+        //      {"category" : { $eq: req.query.i}}  
+        //   },      
+  {
+          $group : 
+              {"_id" :  "$category"  , 
+              total : { $sum : 1},
+              }
+            }
+          
+              ])
+            //   console.log(data);
+        
+      res.status(200).json({
+        status: "success",
+        message: "all data found",
+        data: data
+      })
+  
+    } catch (error) {
+      res.status(404).json({
+        status: "fail",
+        message: error.message,
+  
+      })
+    }
+  }

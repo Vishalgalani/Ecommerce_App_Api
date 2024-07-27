@@ -58,7 +58,7 @@ exports.addCategory = async function(req, res, next) {
     } catch (error) {
         res.status(404).json({
             status : "fail",
-            message : error.message
+            message : error.message 
         })
     }
   }

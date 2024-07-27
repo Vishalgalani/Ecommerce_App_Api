@@ -44,6 +44,8 @@ router.get('/search', productController.searchProduct);
 //======================Pagination======================
 router.get('/page',productController.allPage)
 
+//======================Group======================
+router.get('/products',productController.Group)
 
 
 module.exports = router;
